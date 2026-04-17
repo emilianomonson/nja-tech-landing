@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import * as AOS from 'aos';
 
@@ -9,20 +9,25 @@ import * as AOS from 'aos';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class App implements OnInit {
+export class App implements AfterViewInit {
   title = 'nja-tech-landing';
 
-  // Inyectamos el ID de la plataforma para saber dónde estamos parados
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  ngOnInit() {
-    // Le decimos a Angular: "Si estás en el navegador, recién ahí activá las animaciones"
+  // Cambiamos ngOnInit por ngAfterViewInit para asegurar que el HTML ya se dibujó
+  ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-      AOS.init({
-        duration: 800, // Cuánto dura la animación
-        once: true,    // Para que ocurra solo una vez al bajar
-        offset: 100    // Margen antes de activar la animación
-      });
+      // Le damos un respiro mínimo a Angular para que acomode las imágenes
+      setTimeout(() => {
+        AOS.init({
+          duration: 600, // Lo bajamos de 800 a 600 para que sea más veloz
+          once: true,
+          offset: 30     // Arranca casi apenas aparece en pantalla (estaba en 100)
+        });
+        
+        // Forzamos a AOS a recalcular las posiciones exactas de todo
+        AOS.refresh();
+      }, 150);
     }
   }
 }
