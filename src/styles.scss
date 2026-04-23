@@ -1,8 +1,12 @@
 @import 'aos/dist/aos.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
+html, body {
+  overflow-x: hidden;
   scroll-behavior: smooth;
+  background-color: #0a0a0a; /* Magia anti-barras blancas */
+  color: white; /* Nos aseguramos que el texto por defecto sea blanco */
 }
